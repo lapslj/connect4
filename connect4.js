@@ -14,6 +14,8 @@ let htmlBoard = document.querySelector("#board")
 let plrbox1 = document.querySelector(".box1")
 let plrbox2 = document.querySelector(".box2")
 let scorebox = document.querySelector("#playerdata")
+let statusbox = document.querySelector("#instructions")
+let gameover = false;
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
@@ -60,6 +62,7 @@ function makeHtmlBoard() {
   }
   let boxWdth = 56 * WIDTH
   scorebox.style.width = boxWdth + "px"
+  statusbox.style.width = boxWdth + "px"
 }
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
@@ -101,14 +104,19 @@ function putPieceInTable(y, x, pno,destSpot) {
 function endGame(msg) {
   top.removeEventListener("click", handleClick)
   setTimeout(function(){
+    statusbox.innerText = "nice job player "+pno
     alert(msg)},300)
+  gameover = true;
 }
 
 
 /** handleClick: handle click of column top to play piece */
 
 
-function handleClick(evt) {
+const handleClick = (evt) => {
+  if (gameover === true){
+    statusbox.innerText = "the game is over. reload to restart."
+    return};
   // get x from ID of clicked cell
   let x = +evt.target.id
 
@@ -131,6 +139,7 @@ function handleClick(evt) {
   pno = (pno === 1 ? 2 : 1)
   currbox.classList.toggle("yourturn")
   nextbox.classList.toggle("yourturn")
+  statusbox.innerText = "your turn player "+pno
 
 }
 function tieCheck() {
@@ -156,23 +165,59 @@ function checkForWin() {
         x < WIDTH &&
         board[y][x] === pno
     );
-  }
+  }//win function checks that all these cells are in the board AND equal same player color
 
   // TODO: read and understand this code. Add comments to help you.
 
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
-      let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]]; //horizontal win array
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]]; //vertical win array
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]]; //diagonal win array
+      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]]; //diagonal win array
 
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      if (_win(horiz)){
+        winPainter(horiz);
         return true;
       }
+      if (_win(vert)){
+        winPainter(vert);
+        return true;
+      }
+      if (_win(diagDR)){
+        winPainter(diagDR);
+        return true;
+      }
+      if (_win(diagDL)){
+        winPainter(diagDL);
+        return true;
+      }
+      // if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      //   return true;
+      // }
     }
   }
 }
+
+function winPainter(cells) {
+  for(i=0;i<=3;i++){
+    let hi1 = document.getElementById(cells[i][0]+"-"+cells[i][1])
+    hi1.style.backgroundColor = "gold"
+  }
+}
+    
+
+    // return cells.every(
+    //   ([y, x]) =>
+    //     y >= 0 &&
+    //     y < HEIGHT &&
+    //     x >= 0 &&
+    //     x < WIDTH &&
+    //     board[y][x] === pno
+    // );
+  //win function checks that all these cells are in the board AND equal same player color
+
+  // TODO: read and understand this code. Add comments to help you.
 
 makeBoard();
 makeHtmlBoard();

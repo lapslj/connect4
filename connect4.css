@@ -12,6 +12,15 @@
   background-color: gold;
 }
 
+#instructions {
+  margin:10px 0px 0px 0px;
+  background:rgb(113, 109, 130);
+  color:yellow;
+  font-family:'Courier New';
+  text-align:center;
+}
+
+
 .topguide{
   text-align: center;
   font-family: 'Arial';
