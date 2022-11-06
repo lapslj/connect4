@@ -48,6 +48,7 @@ function makeHtmlBoard() {
       const cell = document.createElement("td"); //creating cells for each column
       cell.setAttribute("id", `${y}-${x}`); //giving each cell a unique number ID
       cell.setAttribute("occ", "false"); //setting "occupied" attribute to false
+      //cell.innerText = y + ", " + x
       row.append(cell);
     }
     htmlBoard.append(row);
@@ -59,19 +60,12 @@ function makeHtmlBoard() {
 function findSpotForCol(x) {
   //make a column array of current board at x
   let chArray = []
-  for (let i = 0; i < HEIGHT; i++){
-    chArray = [...chArray,board[i][x]]
+  for (let i = HEIGHT; i > 0; i--){
+    chArray = [...chArray,board[i-1][x]]
     console.log(chArray)
   }
-  return chArray.findIndex((val)=>val === 0)
+  return HEIGHT - 1 - chArray.findIndex((val)=>val === 0)
 }
-  // y = HEIGHT - 1
-  // console.log(y)
-  // console.log(x)
-  // for (let i = y; i >= 0; i--){
-  //   console.log(board[y][x])
-  //   if(board[y][x]===0) {return i};
-  // }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
@@ -101,35 +95,44 @@ function putPieceInTable(y, x, pno,destSpot) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  alert(msg)
+  top.removeEventListener("click", handleClick)
 }
+
 
 /** handleClick: handle click of column top to play piece */
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  let cId = evt.target.id
-  //console.log(cId)
-  //split id into x and y parameters
-  let x = +[...cId][2]
-  //console.log(x)
+  let x = +evt.target.id
+  console.log(x)
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
   if (y === null) {
     return;
   }
+  console.log(`y is ${y},x is ${x}`)
   placeInTable(y,x,pno); //place piece in board and add to table
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${pno} won!`);
   }
-  // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
-
+    // check for tie
+  if (tieCheck()){
+    return endGame("tie game");
+  }
   pno = (pno === 1 ? 2 : 1)
 }
-
+function tieCheck() {
+  //create array of all board values
+  let tArray = [];
+  for (let i = 0; i < HEIGHT; i++){
+    tArray = [...tArray,...board[i]]}
+  console.log(tArray);
+  console.log(board);
+  return tArray.every(x => x !==0)
+}
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
 function checkForWin() {
@@ -166,5 +169,4 @@ function checkForWin() {
 
 makeBoard();
 makeHtmlBoard();
-htmlBoard.addEventListener("click",handleClick)
 
