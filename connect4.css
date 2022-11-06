@@ -8,11 +8,20 @@
 
 /* pieces are div within game table cells: draw as colored circles */
 
-.piece {
-  /* TODO: make into circles */
+.piece1 {
+  background-color: blue;
   margin: 5px;
   width: 80%;
   height: 80%;
+  border-radius: 50%;
+}
+
+.piece2 {
+  background-color: red;
+  margin: 5px;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
