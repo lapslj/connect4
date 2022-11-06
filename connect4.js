@@ -11,6 +11,9 @@ const HEIGHT = 6;
 let pno = 1; // active player: 1 or 2
 let board = []; // array of rows, each row is array of cells  (board[y][x])
 let htmlBoard = document.querySelector("#board")
+let plrbox1 = document.querySelector(".box1")
+let plrbox2 = document.querySelector(".box2")
+let scorebox = document.querySelector("#playerdata")
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
@@ -37,6 +40,8 @@ function makeHtmlBoard() {
   for (let x = 0; x < WIDTH; x++) {
     let headCell = document.createElement("td");
     headCell.setAttribute("id", x);
+    headCell.setAttribute("class","topguide")
+    headCell.innerText = "click here to drop pieces";
     top.append(headCell);
   }
   htmlBoard.append(top);
@@ -53,6 +58,8 @@ function makeHtmlBoard() {
     }
     htmlBoard.append(row);
   }
+  let boxWdth = 56 * WIDTH
+  scorebox.style.width = boxWdth + "px"
 }
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
@@ -62,7 +69,6 @@ function findSpotForCol(x) {
   let chArray = []
   for (let i = HEIGHT; i > 0; i--){
     chArray = [...chArray,board[i-1][x]]
-    console.log(chArray)
   }
   return HEIGHT - 1 - chArray.findIndex((val)=>val === 0)
 }
@@ -84,35 +90,33 @@ function placeInTable(y, x, pno) {
 function putPieceInTable(y, x, pno,destSpot) {
     //let destSpot = document.getElementById(`${y}-${x}`);
     let piece = document.createElement("div");
-    console.log("hi")
     piece.setAttribute("class","piece"+pno);
     destSpot.append(piece); //stick the piece in there IF unoccupied
     destSpot.setAttribute("occ",true)
     board[y][x] = pno;
-    console.log(board)
 }
 
 /** endGame: announce game end */
 
 function endGame(msg) {
-  alert(msg)
   top.removeEventListener("click", handleClick)
+  setTimeout(function(){
+    alert(msg)},300)
 }
 
 
 /** handleClick: handle click of column top to play piece */
 
+
 function handleClick(evt) {
   // get x from ID of clicked cell
   let x = +evt.target.id
-  console.log(x)
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
   if (y === null) {
     return;
   }
-  console.log(`y is ${y},x is ${x}`)
   placeInTable(y,x,pno); //place piece in board and add to table
   // check for win
   if (checkForWin()) {
@@ -122,15 +126,18 @@ function handleClick(evt) {
   if (tieCheck()){
     return endGame("tie game");
   }
+  let currbox = pno === 1 ? plrbox1 : plrbox2;
+  let nextbox = pno === 1 ? plrbox2 : plrbox1;
   pno = (pno === 1 ? 2 : 1)
+  currbox.classList.toggle("yourturn")
+  nextbox.classList.toggle("yourturn")
+
 }
 function tieCheck() {
   //create array of all board values
   let tArray = [];
   for (let i = 0; i < HEIGHT; i++){
     tArray = [...tArray,...board[i]]}
-  console.log(tArray);
-  console.log(board);
   return tArray.every(x => x !==0)
 }
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -169,4 +176,4 @@ function checkForWin() {
 
 makeBoard();
 makeHtmlBoard();
-
+plrbox1.classList.toggle("yourturn")

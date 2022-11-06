@@ -12,7 +12,48 @@
   background-color: gold;
 }
 
-/* pieces are div within game table cells: draw as colored circles */
+.topguide{
+  text-align: center;
+  font-family: 'Arial';
+  font-size:10px;
+  font-style:italic;
+}
+
+#playerdata{
+  margin: 5px 0px 0px 0px;
+  border-radius: 5%;
+  background-color:rgb(113, 109, 130);
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.plrbox {
+  border-radius: 2%;
+  width: 150px;
+  height: 50px;
+  border: solid 3px;
+  border-color: rgb(113, 109, 130);
+  margin: 5px;
+  color:white;
+  text-align:center;
+  vertical-align:middle;
+  font-size:40px;
+  font-family: 'Franklin Gothic Medium';
+}
+
+.box1 {
+  background-color: blue;
+}
+
+.box2 {
+  background-color: red;
+}
+
+.yourturn {
+  border: dotted 3px;
+  border-color:white;
+  color:yellow;
+}
 
 .piece1 {
   background-color: blue;
@@ -29,10 +70,6 @@
   height: 80%;
   border-radius: 50%;
 }
-
-/* TODO: make pieces red/blue,  depending on player 1/2 piece */
-
-/* column-top is table row of clickable areas for each column */
 
 #column-top td {
   border: dashed 1px lightgray;
