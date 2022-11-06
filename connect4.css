@@ -86,4 +86,5 @@
 
 #column-top td:hover {
   background-color: gold;
+  cursor:grab;
 }
